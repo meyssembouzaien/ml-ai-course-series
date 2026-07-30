@@ -1,7 +1,6 @@
 # 05 — Classification II: Complete Course (All Models)
 
-**Slides:** `classification-complete.tex` — add your PDF here, e.g.
-`classification-complete.pdf`
+
 
 ## What this chapter covers
 
