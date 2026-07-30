@@ -1,6 +1,6 @@
-# 02 — Introduction to Machine Learning
+# 02 : Introduction to Machine Learning
 
-**Slides:** `intro-to-ml.tex` — add your PDF here, e.g. `intro-to-ml.pdf`
+
 
 ## What this chapter covers
 
