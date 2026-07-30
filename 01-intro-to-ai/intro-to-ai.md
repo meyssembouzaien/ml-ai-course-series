@@ -1,10 +1,8 @@
 # Introduction to Artificial Intelligence
 
-**Meyssem Bouzaien** — Academic Year 2025-2026
+**Meyssem Bouzaien** : Academic Year 2025-2026
 
-> Note: this file was reconstructed from the rendered slide deck (PDF), since the
-> original LaTeX/Beamer source for this course was not available. If you find the
-> original `.tex` source later, it can replace this file for a native Beamer version.
+
 
 ---
 
