@@ -1,6 +1,6 @@
 # 07 — Clustering
 
-**Slides:** two versions — add your PDFs alongside them:
+two versions:
 - `clustering-full.tex` — the complete lecture, e.g. `clustering-full.pdf`
 - `clustering-short.tex` — a condensed intro version, e.g. `clustering-short.pdf`
 
