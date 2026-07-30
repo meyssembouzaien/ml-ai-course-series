@@ -285,13 +285,13 @@ discover hidden structures.
 ## 9. The Future of AI: Emerging Trends
 
 **Emerging technologies:**
-1. **Generative AI** — content creation (ChatGPT, DALL-E, Midjourney)
-2. **Multimodal AI** — Text + Image + Audio (GPT-4V, Gemini)
-3. **Edge AI** — AI on local devices (smartphones, IoT)
-4. **AutoML** — automating ML, democratization
+1. **Generative AI** :content creation (ChatGPT, DALL-E, Midjourney)
+2. **Multimodal AI** : Text + Image + Audio (GPT-4V, Gemini)
+3. **Edge AI** : AI on local devices (smartphones, IoT)
+4. **AutoML** : automating ML, democratization
 
 **Long-term perspectives:**
-- **AGI (General AI):** full human-level intelligence — still far off!
+- **AGI (General AI):** full human-level intelligence — still far off
 - **Explainable AI:** transparency, trust
 - **Responsible AI:** ethics by design, regulation
 - **Human-AI collaboration:** human augmentation, co-creation
