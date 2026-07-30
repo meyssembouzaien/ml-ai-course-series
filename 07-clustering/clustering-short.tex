@@ -1,0 +1,271 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+% Theme
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Information
+\title{Clustering}
+\subtitle{A Short Introduction}
+
+\author{Meyssem Bouzaien}
+\institute{Academic Year: 2025 - 2026}
+\date{}
+
+\begin{document}
+
+\frame{\titlepage}
+
+% ==========================================
+% WHAT IS CLUSTERING?
+% ==========================================
+
+\begin{frame}
+\frametitle{What is Clustering?}
+\begin{center}
+\includegraphics[width=\textwidth]{images/01_concept_clustering.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Simple Definition}
+\begin{block}{Clustering = Grouping}
+Dividing data into groups where the points resemble each other
+\end{block}
+
+\vspace{1.5em}
+\textbf{Goal:}
+\begin{itemize}
+    \item Points in the same group → \textbf{similar}
+    \item Points in different groups → \textbf{different}
+\end{itemize}
+
+\vspace{1.5em}
+\begin{alertblock}{No labels!}
+The algorithm discovers the hidden groups in the data on its own
+\end{alertblock}
+\end{frame}
+
+% ==========================================
+% K-MEANS
+% ==========================================
+
+\begin{frame}
+\frametitle{K-Means: The Main Algorithm}
+\vspace{-0.2cm}
+\begin{center}
+\includegraphics[width=0.75\textwidth]{images/02_kmeans_principe.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{How Does K-Means Work?}
+\begin{block}{Principle}
+K-Means finds K groups by placing centers
+\end{block}
+
+\vspace{1em}
+\textbf{The 4 steps:}
+\begin{enumerate}
+    \item \textbf{Choose K} (desired number of groups)
+    \item \textbf{Place K centers} at random
+    \item \textbf{Assign} each point to the nearest center
+    \item \textbf{Repeat} until the centers stop moving
+\end{enumerate}
+
+\vspace{1em}
+\begin{exampleblock}{Example}
+To segment customers: K=3 → Budget, Mid-range, Premium groups
+\end{exampleblock}
+\end{frame}
+
+% ==========================================
+% CHOOSING K
+% ==========================================
+
+\begin{frame}
+\frametitle{How Do We Choose K?}
+\begin{center}
+\includegraphics[width=0.9\textwidth]{images/03_methode_coude.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{The Elbow Method}
+\begin{block}{Problem}
+K-Means needs to know K in advance. How do we choose it?
+\end{block}
+
+\vspace{1em}
+\textbf{Solution: Look for the "elbow"}
+\begin{itemize}
+    \item Test several values of K (1, 2, 3, ..., 10)
+    \item Measure the quality for each K
+    \item The plot forms an "elbow"
+    \item The elbow indicates the optimal K
+\end{itemize}
+
+\vspace{1em}
+\begin{alertblock}{Rule}
+Choose K at the elbow = good trade-off!
+\end{alertblock}
+\end{frame}
+
+% ==========================================
+% THE 3 ALGORITHMS
+% ==========================================
+
+\begin{frame}
+\frametitle{The 3 Clustering Algorithms}
+\begin{center}
+\includegraphics[width=\textwidth]{images/04_comparaison_algorithmes.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Comparing the 3 Algorithms}
+\begin{table}
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{Algorithm} & \textbf{Advantage} & \textbf{Use} \\
+\midrule
+K-Means & Fast and simple & Round groups \\
+Hierarchical & No need for K & Small datasets \\
+DBSCAN & Complex shapes & Noise/Outliers \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{1.5em}
+\textbf{Which to choose?}
+\begin{itemize}
+    \item \textbf{K-Means}: Most of the time (fast, effective)
+    \item \textbf{Hierarchical}: When you don't know K
+    \item \textbf{DBSCAN}: Irregular shapes or noise present
+\end{itemize}
+\end{frame}
+
+% ==========================================
+% APPLICATIONS
+% ==========================================
+
+\begin{frame}
+\frametitle{Concrete Applications}
+\vspace{-0.2cm}
+\begin{center}
+\includegraphics[width=0.75\textwidth]{images/05_applications.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Examples of Use}
+\begin{table}
+\centering
+\small
+\begin{tabular}{ll}
+\toprule
+\textbf{Domain} & \textbf{Application} \\
+\midrule
+Marketing & Customer segmentation \\
+E-commerce & Product recommendations \\
+Documents & Organization by topic \\
+Security & Anomaly detection \\
+Images & Compression (reducing colors) \\
+Biology & Gene groups \\
+Social networks & Communities \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+\begin{exampleblock}{Typical Case}
+A company with 10,000 customers → 4 segments for targeted marketing
+\end{exampleblock}
+\end{frame}
+
+% ==========================================
+% SIMPLE WORKFLOW
+% ==========================================
+
+\begin{frame}
+\frametitle{How to Do Clustering? (5 Steps)}
+\begin{enumerate}
+    \item \textbf{Collect} the data
+    \vspace{0.5em}
+    
+    \item \textbf{Normalize} (bring to the same scale)
+    \vspace{0.5em}
+    
+    \item \textbf{Choose K} (elbow method)
+    \vspace{0.5em}
+    
+    \item \textbf{Apply} K-Means
+    \vspace{0.5em}
+    
+    \item \textbf{Interpret} the groups
+\end{enumerate}
+
+\vspace{1em}
+\begin{alertblock}{The Most Important Thing}
+Interpretation! The groups must make sense for your domain.
+\end{alertblock}
+\end{frame}
+
+% ==========================================
+% KEY POINTS
+% ==========================================
+
+\begin{frame}
+\frametitle{Key Points to Remember}
+\begin{block}{1. UNsupervised Learning}
+No labels → we discover hidden structures
+\end{block}
+
+\vspace{0.5em}
+\begin{block}{2. K-Means = The Main Algorithm}
+Fast, simple, effective for most cases
+\end{block}
+
+\vspace{0.5em}
+\begin{block}{3. Elbow Method}
+To find the right number of groups (K)
+\end{block}
+
+\vspace{0.5em}
+\begin{block}{4. Normalize the Data}
+ALWAYS bring the features to the same scale
+\end{block}
+
+\vspace{0.5em}
+\begin{block}{5. Applications Everywhere}
+Marketing, documents, anomalies, compression, etc.
+\end{block}
+\end{frame}
+
+% ==========================================
+% CONCLUSION
+% ==========================================
+
+\begin{frame}
+\frametitle{In Summary}
+\textbf{Clustering is:}
+\begin{itemize}
+    \item Finding groups in unlabeled data
+    \item K-Means: the main tool (fast and effective)
+    \item Elbow method: for choosing K
+    \item Many applications: customers, documents, etc.
+\end{itemize}
+
+\vspace{2em}
+\begin{alertblock}{The Essential Takeaway}
+Clustering reveals hidden structures to help you better understand your data
+\end{alertblock}
+\end{frame}
+
+
+\end{document}

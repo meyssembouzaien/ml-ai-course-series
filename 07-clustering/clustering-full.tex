@@ -1,0 +1,935 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+
+% Theme configuration
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Color configuration
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Python code style
+\lstdefinestyle{pythonstyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=Python
+}
+
+\lstset{style=pythonstyle}
+
+% Document information
+\title{Clustering}
+\subtitle{Unsupervised Learning}
+\author{Meyssem Bouzaien}
+\institute{Academic Year: 2025 - 2026}
+\date{}
+
+\begin{document}
+
+% Title page
+\frame{\titlepage}
+
+% Outline
+\begin{frame}
+\frametitle{Course Outline}
+\tableofcontents
+\end{frame}
+
+% ==========================================
+% SECTION 1: INTRODUCTION
+% ==========================================
+\section{What is Clustering?}
+
+\begin{frame}
+\frametitle{Reminder: Supervised vs Unsupervised}
+\begin{center}
+\includegraphics[width=\textwidth]{images/01_supervise_vs_non_supervise.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Supervised vs Unsupervised Learning}
+\begin{columns}
+\begin{column}{0.48\textwidth}
+\textbf{Supervised}
+\begin{itemize}
+    \item Labels provided
+    \item We know what we're looking for
+    \item Classification, Regression
+    \item Example: Spam/Not spam
+\end{itemize}
+\end{column}
+
+\begin{column}{0.48\textwidth}
+\textbf{Unsupervised}
+\begin{itemize}
+    \item No labels
+    \item Discovering structures
+    \item Clustering, Dim. reduction
+    \item Example: Customer groups
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{1em}
+\begin{alertblock}{Key Difference}
+Unsupervised = No "right answer" to learn from!
+\end{alertblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{The Concept of Clustering}
+\begin{center}
+\includegraphics[width=\textwidth]{images/02_concept_clustering.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{What is Clustering?}
+\begin{block}{Definition}
+Clustering consists of dividing data into homogeneous groups where points within the same group resemble each other.
+\end{block}
+
+\vspace{1em}
+\textbf{Goal:}
+\begin{itemize}
+    \item Points within the same cluster → similar
+    \item Points from different clusters → different
+\end{itemize}
+
+\vspace{1em}
+\textbf{No labels!}
+\begin{itemize}
+    \item The algorithm discovers the groups on its own
+    \item The categories are not known in advance
+    \item Exploration and pattern discovery
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Applications of Clustering}
+\begin{center}
+\includegraphics[width=\textwidth]{images/03_applications_clustering.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Concrete Examples}
+\begin{table}
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+\textbf{Domain} & \textbf{Application} & \textbf{Goal} \\
+\midrule
+Marketing & Customer segmentation & Homogeneous groups \\
+E-commerce & Recommendations & Similar customers \\
+Biology & Gene groups & Similar functions \\
+Documents & Organization & Similar topics \\
+Security & Anomaly detection & Suspicious behavior \\
+Images & Compression & Reducing colors \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+\begin{exampleblock}{Typical Use Case}
+A company has 10,000 customers → create 4-5 segments for targeted marketing
+\end{exampleblock}
+\end{frame}
+
+% ==========================================
+% SECTION 2: K-MEANS
+% ==========================================
+\section{K-Means: The Main Algorithm}
+
+\begin{frame}
+\frametitle{K-Means: How Does It Work?}
+\begin{center}
+\includegraphics[width=\textwidth]{images/04_kmeans_principe.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{K-Means Algorithm - Steps}
+\begin{block}{Principle}
+K-Means finds K groups by iterating until convergence
+\end{block}
+
+\vspace{0.5em}
+\textbf{Steps:}
+\begin{enumerate}
+    \item \textbf{Choose K}: Desired number of clusters
+    \item \textbf{Initialize}: K random centers
+    \item \textbf{Assignment}: Each point → nearest center
+    \item \textbf{Update}: Recompute centers (mean of points)
+    \item \textbf{Repeat}: Steps 3-4 until convergence
+\end{enumerate}
+
+\vspace{1em}
+\begin{alertblock}{Convergence}
+The centers stop moving = the algorithm is done!
+\end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{K-Means with Python}
+\begin{lstlisting}[language=Python]
+from sklearn.cluster import KMeans
+import numpy as np
+
+# Data
+X = np.array([[1, 2], [1.5, 1.8], [5, 8], 
+              [8, 8], [1, 0.6], [9, 11]])
+
+# K-Means with K=2
+kmeans = KMeans(n_clusters=2, random_state=42)
+
+# Fit
+kmeans.fit(X)
+
+# Predictions (cluster labels)
+labels = kmeans.labels_
+print("Labels:", labels)  # [0, 0, 1, 1, 0, 1]
+
+# Centers
+centers = kmeans.cluster_centers_
+print("Centers:", centers)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Choosing K: The Elbow Method}
+\begin{center}
+\includegraphics[width=\textwidth]{images/05_methode_coude.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{How Do We Choose K?}
+\begin{block}{Problem}
+K-Means requires K to be specified in advance. How do we choose it?
+\end{block}
+
+\vspace{0.5em}
+\textbf{Elbow Method:}
+\begin{enumerate}
+    \item Test several values of K (1, 2, 3, ..., 10)
+    \item For each K, compute the inertia
+    \item Plot Inertia vs K
+    \item Look for the "elbow" (inflection point)
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Inertia:}
+\begin{itemize}
+    \item Sum of squared distances between points and their centers
+    \item The lower the inertia, the better
+    \item Always decreases as K increases
+\end{itemize}
+
+\vspace{0.5em}
+\begin{alertblock}{The Elbow}
+The point where inertia stops decreasing quickly = optimal K
+\end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Elbow Method - Code}
+\begin{lstlisting}[language=Python]
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+
+# Test K from 1 to 10
+inertias = []
+K_range = range(1, 11)
+
+for k in K_range:
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(X)
+    inertias.append(kmeans.inertia_)
+
+# Plot
+plt.plot(K_range, inertias, 'bo-')
+plt.xlabel('Number of clusters K')
+plt.ylabel('Inertia')
+plt.title('Elbow Method')
+plt.show()
+
+# Choose K at the elbow
+# For example: K=3 or K=4
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{K-Means: Advantages and Limits}
+\begin{columns}
+\begin{column}{0.48\textwidth}
+\textbf{✓ Advantages}
+\begin{itemize}
+    \item Simple and fast
+    \item Works well on large datasets
+    \item Easy to understand
+    \item Effective for spherical clusters
+\end{itemize}
+\end{column}
+
+\begin{column}{0.48\textwidth}
+\textbf{✗ Limits}
+\begin{itemize}
+    \item Must choose K in advance
+    \item Sensitive to initialization
+    \item Assumes spherical clusters
+    \item Sensitive to outliers
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{1em}
+\begin{block}{When to Use It?}
+K-Means is excellent when we roughly know the number of groups and the clusters are round-shaped.
+\end{block}
+\end{frame}
+
+% ==========================================
+% SECTION 3: HIERARCHICAL CLUSTERING
+% ==========================================
+\section{Hierarchical Clustering}
+
+\begin{frame}
+\frametitle{Hierarchical Clustering}
+\begin{center}
+\includegraphics[width=\textwidth]{images/06_clustering_hierarchique.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Principle of Hierarchical Clustering}
+\begin{block}{Idea}
+Build a hierarchy of clusters by progressively merging points/groups
+\end{block}
+
+\vspace{0.5em}
+\textbf{Algorithm (bottom-up approach):}
+\begin{enumerate}
+    \item Initially: each point = 1 cluster
+    \item Merge the 2 closest clusters
+    \item Repeat until there is only 1 cluster
+    \item Result: a tree (dendrogram)
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Main advantage:}
+\begin{itemize}
+    \item \textbf{No need to choose K in advance!}
+    \item We "cut" the tree at the desired level
+    \item Clear visualization with the dendrogram
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Dendrogram}
+\textbf{What is a dendrogram?}
+\begin{itemize}
+    \item A tree showing how clusters merge
+    \item Y-axis = distance between clusters
+    \item Cutting the tree horizontally → choosing K
+\end{itemize}
+
+\vspace{1em}
+\textbf{Reading it:}
+\begin{itemize}
+    \item Merge height = dissimilarity
+    \item The higher the merge, the more different the groups
+    \item Cut low → many clusters
+    \item Cut high → few clusters
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Hierarchical Clustering - Code}
+\begin{lstlisting}[language=Python]
+from sklearn.cluster import AgglomerativeClustering
+from scipy.cluster.hierarchy import dendrogram, linkage
+import matplotlib.pyplot as plt
+
+# Data
+X = [[1, 2], [1.5, 1.8], [5, 8], [8, 8]]
+
+# Hierarchical clustering (K=2)
+hier = AgglomerativeClustering(n_clusters=2)
+labels = hier.fit_predict(X)
+print("Labels:", labels)
+
+# Dendrogram
+linkage_matrix = linkage(X, method='ward')
+plt.figure(figsize=(10, 5))
+dendrogram(linkage_matrix)
+plt.title('Dendrogram')
+plt.xlabel('Points')
+plt.ylabel('Distance')
+plt.show()
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Hierarchical: Advantages and Limits}
+\begin{columns}
+\begin{column}{0.48\textwidth}
+\textbf{✓ Advantages}
+\begin{itemize}
+    \item No need for K
+    \item Informative dendrogram
+    \item Natural hierarchy
+    \item Deterministic
+\end{itemize}
+\end{column}
+
+\begin{column}{0.48\textwidth}
+\textbf{✗ Limits}
+\begin{itemize}
+    \item Slow on large datasets
+    \item No reassignment
+    \item Sensitive to noise
+    \item O(n³) complexity
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{1em}
+\begin{block}{When to Use It?}
+Good for small/medium datasets when you want to explore the natural hierarchy of the data
+\end{block}
+\end{frame}
+
+% ==========================================
+% SECTION 4: DBSCAN
+% ==========================================
+\section{DBSCAN}
+
+\begin{frame}
+\frametitle{DBSCAN: Arbitrary Shapes}
+\begin{center}
+\includegraphics[width=\textwidth]{images/07_dbscan.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{DBSCAN: Principle}
+\begin{block}{Definition}
+DBSCAN (Density-Based Spatial Clustering) groups points in dense regions and identifies noise
+\end{block}
+
+\vspace{0.5em}
+\textbf{Two parameters:}
+\begin{itemize}
+    \item \textbf{eps}: Neighborhood radius
+    \item \textbf{min\_samples}: Minimum points to be considered dense
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Types of points:}
+\begin{itemize}
+    \item \textbf{Core points}: At least min\_samples neighbors within eps
+    \item \textbf{Border points}: Fewer than min\_samples neighbors, but near a core point
+    \item \textbf{Noise}: Neither core nor border → outliers
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Advantages of DBSCAN}
+\textbf{✓ Strengths:}
+\begin{itemize}
+    \item Detects arbitrary shapes (not just round ones!)
+    \item Automatically identifies noise
+    \item No need to specify K
+    \item Robust to outliers
+\end{itemize}
+
+\vspace{1em}
+\textbf{✗ Limitations:}
+\begin{itemize}
+    \item Sensitive to the eps and min\_samples parameters
+    \item Struggles with varying densities
+    \item Not efficient in high dimensions
+\end{itemize}
+
+\vspace{1em}
+\begin{block}{When to Use It?}
+Excellent for data with complex shapes and the presence of noise/outliers
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{DBSCAN - Code}
+\begin{lstlisting}[language=Python]
+from sklearn.cluster import DBSCAN
+import numpy as np
+
+# Data
+X = np.array([[1, 2], [2, 2], [2, 3],
+              [8, 7], [8, 8], [25, 80]])
+
+# DBSCAN
+dbscan = DBSCAN(eps=3, min_samples=2)
+labels = dbscan.fit_predict(X)
+
+print("Labels:", labels)
+# Example: [0, 0, 0, 1, 1, -1]
+# -1 = noise/outlier
+
+# Number of clusters (excluding noise)
+n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+print(f"Number of clusters: {n_clusters}")
+\end{lstlisting}
+\end{frame}
+
+% ==========================================
+% SECTION 5: COMPARISON
+% ==========================================
+\section{Comparing the Algorithms}
+
+\begin{frame}
+\frametitle{Visual Comparison}
+\begin{center}
+\includegraphics[width=\textwidth]{images/08_comparaison_algorithmes.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Comparison Table}
+\begin{table}
+\centering
+\tiny
+\begin{tabular}{lllll}
+\toprule
+\textbf{Algorithm} & \textbf{Needs K?} & \textbf{Shape} & \textbf{Speed} & \textbf{Use} \\
+\midrule
+K-Means & Yes & Spherical & Fast & Standard \\
+Hierarchical & No & Any & Slow & Small dataset \\
+DBSCAN & No & Arbitrary & Medium & Complex shapes \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+\textbf{Choose based on:}
+\begin{itemize}
+    \item \textbf{Data size}: K-Means (large), Hierarchical (small)
+    \item \textbf{Cluster shape}: K-Means (round), DBSCAN (complex)
+    \item \textbf{Knowledge of K}: K-Means (yes), others (no)
+    \item \textbf{Presence of noise}: DBSCAN (yes), K-Means (no)
+\end{itemize}
+\end{frame}
+
+% ==========================================
+% SECTION 6: EVALUATION
+% ==========================================
+\section{Evaluating Clustering}
+
+\begin{frame}
+\frametitle{How Do We Evaluate a Clustering?}
+\begin{alertblock}{Problem}
+No labels → no accuracy! How do we know if it's good?
+\end{alertblock}
+
+\vspace{1em}
+\textbf{Silhouette Score:}
+\begin{itemize}
+    \item Measures the quality of the clustering
+    \item Ranges between -1 and +1
+    \item For each point: compactness vs separation
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Interpretation:}
+\begin{itemize}
+    \item \textbf{Close to +1}: Good clustering
+    \item \textbf{Close to 0}: Points on the boundary
+    \item \textbf{Negative}: Poor clustering
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Silhouette Score - Code}
+\begin{lstlisting}[language=Python]
+from sklearn.metrics import silhouette_score
+from sklearn.cluster import KMeans
+
+# Data
+X = [[1, 2], [1.5, 1.8], [5, 8], [8, 8], [1, 0.6], [9, 11]]
+
+# Clustering
+kmeans = KMeans(n_clusters=2, random_state=42)
+labels = kmeans.fit_predict(X)
+
+# Silhouette Score
+score = silhouette_score(X, labels)
+print(f"Silhouette Score: {score:.3f}")
+
+# Interpretation
+if score > 0.5:
+    print("Good clustering")
+elif score > 0.25:
+    print("Acceptable clustering")
+else:
+    print("Poor clustering")
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Other Metrics}
+\textbf{Internal metrics (without labels):}
+\begin{itemize}
+    \item \textbf{Silhouette}: Overall quality
+    \item \textbf{Inertia}: Cluster compactness (K-Means)
+    \item \textbf{Davies-Bouldin}: Compactness/separation ratio
+\end{itemize}
+
+\vspace{1em}
+\textbf{External metrics (with labels, if available):}
+\begin{itemize}
+    \item \textbf{Adjusted Rand Index}: Similarity to true labels
+    \item \textbf{Normalized Mutual Information}: Shared information
+\end{itemize}
+
+\vspace{1em}
+\begin{block}{Advice}
+Use Silhouette + visualization to evaluate
+\end{block}
+\end{frame}
+
+% ==========================================
+% SECTION 7: WORKFLOW
+% ==========================================
+\section{Practical Workflow}
+
+\begin{frame}
+\frametitle{Complete Workflow}
+\begin{center}
+\includegraphics[width=\textwidth]{images/09_workflow_complet.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Clustering Pipeline}
+\textbf{The 7 steps:}
+\begin{enumerate}
+    \item \textbf{Data}: Collection and exploration
+    \item \textbf{Preprocessing}: Normalization (important!)
+    \item \textbf{Choosing K}: Elbow method or other
+    \item \textbf{Clustering}: Apply the algorithm
+    \item \textbf{Evaluation}: Silhouette Score
+    \item \textbf{Interpretation}: Analyze the groups
+    \item \textbf{Action}: Use the insights
+\end{enumerate}
+
+\vspace{1em}
+\begin{alertblock}{Normalization}
+ALWAYS normalize the data before clustering!
+\end{alertblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{Why Normalize?}
+\begin{exampleblock}{Example Without Normalization}
+\begin{itemize}
+    \item Feature 1: Income (0 - €100,000)
+    \item Feature 2: Age (0 - 100 years)
+\end{itemize}
+→ Income would dominate the distance!
+\end{exampleblock}
+
+\vspace{1em}
+\textbf{Solution: StandardScaler}
+\begin{itemize}
+    \item Mean = 0
+    \item Standard deviation = 1
+    \item All features on the same scale
+\end{itemize}
+
+\vspace{1em}
+\begin{block}{Rule}
+Normalize BEFORE clustering, for K-Means and DBSCAN
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Complete Template}
+\begin{lstlisting}[language=Python]
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+import pandas as pd
+
+# 1. Load
+df = pd.read_csv('data.csv')
+
+# 2. Prepare
+X = df[['feature1', 'feature2']].values
+
+# 3. Normalize
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# 4. Choose K (elbow method)
+# ... elbow code ...
+
+# 5. Clustering
+kmeans = KMeans(n_clusters=3, random_state=42)
+labels = kmeans.fit_predict(X_scaled)
+
+# 6. Evaluate
+score = silhouette_score(X_scaled, labels)
+print(f"Silhouette: {score:.3f}")
+
+# 7. Interpret
+df['Cluster'] = labels
+print(df.groupby('Cluster').mean())
+\end{lstlisting}
+\end{frame}
+
+% ==========================================
+% SECTION 8: EXERCISES
+% ==========================================
+\section{Practice Exercises}
+
+\begin{frame}
+\frametitle{Exercise 1: Customer Segmentation}
+\textbf{Dataset:} Customer data from an e-commerce site
+
+\vspace{0.5em}
+\textbf{Features:}
+\begin{itemize}
+    \item Annual income
+    \item Spending score (1-100)
+\end{itemize}
+
+\vspace{1em}
+\textbf{To do:}
+\begin{enumerate}
+    \item Load and visualize the data
+    \item Normalize
+    \item Use the elbow method to find K
+    \item Apply K-Means
+    \item Compute the Silhouette Score
+    \item Interpret the segments (profiles)
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exercise 2: Comparing Algorithms}
+\textbf{Dataset:} Scikit-learn's make\_moons (curved shapes)
+
+\vspace{1em}
+\textbf{To do:}
+\begin{enumerate}
+    \item Create the dataset with \texttt{make\_moons}
+    \item Apply K-Means (K=2)
+    \item Apply Hierarchical Clustering
+    \item Apply DBSCAN
+    \item Visualize the 3 results
+    \item Compare visually: which works best?
+    \item Compute Silhouette for each
+\end{enumerate}
+
+\vspace{0.5em}
+\textbf{Goal:} Understand that DBSCAN is better for non-spherical shapes
+\end{frame}
+
+% ==========================================
+% SECTION 9: BEST PRACTICES
+% ==========================================
+\section{Best Practices}
+
+\begin{frame}
+\frametitle{Clustering Checklist}
+\begin{enumerate}
+    \item ✓ \textbf{Always} normalize the data
+    \item ✓ \textbf{Visualize} before clustering
+    \item ✓ \textbf{Test} several values of K
+    \item ✓ \textbf{Use} the elbow method
+    \item ✓ \textbf{Compute} the Silhouette Score
+    \item ✓ \textbf{Compare} several algorithms
+    \item ✓ \textbf{Interpret} the clusters (business meaning)
+    \item ✓ \textbf{Document} your choices
+\end{enumerate}
+
+\vspace{1em}
+\begin{alertblock}{The Most Important Thing}
+Interpretation! A good clustering must make sense for the domain.
+\end{alertblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{Mistakes to Avoid}
+\begin{block}{❌ DON'T}
+\begin{itemize}
+    \item Forget to normalize
+    \item Choose K at random
+    \item Only test one algorithm
+    \item Ignore outliers
+    \item Skip checking the Silhouette Score
+    \item Cluster without visualizing
+\end{itemize}
+\end{block}
+
+\vspace{1em}
+\begin{exampleblock}{✅ DO}
+\begin{itemize}
+    \item Visually explore the data
+    \item Normalize systematically
+    \item Test K=2 to K=10 at minimum
+    \item Compare K-Means, Hierarchical, DBSCAN
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+% ==========================================
+% SECTION 10: CONCLUSION
+% ==========================================
+\section{Conclusion}
+
+\begin{frame}
+\frametitle{What You Have Learned}
+\textbf{Concepts:}
+\begin{itemize}
+    \item Difference between supervised/unsupervised
+    \item Definition of clustering
+    \item Concrete applications
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Algorithms:}
+\begin{itemize}
+    \item \textbf{K-Means}: Fast, round clusters
+    \item \textbf{Hierarchical}: Dendrogram, no need for K
+    \item \textbf{DBSCAN}: Arbitrary shapes, detects noise
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Practice:}
+\begin{itemize}
+    \item Elbow method
+    \item Silhouette Score
+    \item Complete workflow with Scikit-learn
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Key Points to Remember}
+\begin{block}{1. Unsupervised = No Labels}
+We discover hidden structures in the data
+\end{block}
+
+\vspace{0.5em}
+\begin{block}{2. Normalization Is Mandatory}
+Always use StandardScaler before clustering
+\end{block}
+
+\vspace{0.5em}
+\begin{block}{3. Elbow Method}
+For finding the optimal K in K-Means
+\end{block}
+
+\vspace{0.5em}
+\begin{block}{4. Silhouette Score}
+Measures quality: close to 1 = good
+\end{block}
+
+\vspace{0.5em}
+\begin{block}{5. Interpretation}
+The clusters must make business sense!
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{When to Use Which Algorithm?}
+\begin{table}
+\centering
+\small
+\begin{tabular}{ll}
+\toprule
+\textbf{Situation} & \textbf{Algorithm} \\
+\midrule
+Large dataset, round clusters & K-Means \\
+Small dataset, explore hierarchy & Hierarchical \\
+Complex shapes, noise & DBSCAN \\
+Don't know how many groups & Hierarchical or DBSCAN \\
+Need for speed & K-Means \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+\begin{alertblock}{Advice}
+In practice: test both K-Means AND DBSCAN, compare the results!
+\end{alertblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{Resources}
+\textbf{Documentation:}
+\begin{itemize}
+    \item Scikit-learn Clustering: \texttt{scikit-learn.org/clustering}
+    \item Pandas, NumPy, Matplotlib
+\end{itemize}
+
+\vspace{1em}
+\textbf{Datasets to practice:}
+\begin{itemize}
+    \item Iris (classic)
+    \item Customer Segmentation (Kaggle)
+    \item Make\_blobs, Make\_moons (Scikit-learn)
+\end{itemize}
+
+\vspace{1em}
+\textbf{Next step:}
+\begin{itemize}
+    \item Model evaluation and improvement
+    \item Advanced cross-validation
+    \item Feature engineering
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+{\Huge Thank You!}
+
+\vspace{2em}
+{\Large Questions?}
+
+\vspace{3em}
+\textbf{Meyssem Bouzaien}\\
+Academic Year 2025-2026
+
+\vspace{2em}
+\textit{Good luck with your clustering labs!}
+\end{center}
+\end{frame}
+
+\end{document}

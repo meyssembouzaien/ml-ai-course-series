@@ -1,0 +1,1156 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{booktabs}
+
+% Theme configuration
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% Color configuration
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Python code style
+\lstdefinestyle{pythonstyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=Python
+}
+
+\lstset{style=pythonstyle}
+
+% Document information
+\title{Regression in Machine Learning}
+\subtitle{Complete Course}
+\author{Meyssem Bouzaien}
+\institute{Academic Year: 2025 - 2026}
+\date{}
+
+\begin{document}
+
+% Title page
+\frame{\titlepage}
+
+% Outline
+\begin{frame}
+\frametitle{Course Outline}
+\tableofcontents
+\end{frame}
+
+% ==========================================
+% SECTION 1: INTRODUCTION
+% ==========================================
+\section{What is Regression?}
+
+\begin{frame}
+\frametitle{Classification vs Regression}
+\begin{center}
+\includegraphics[width=\textwidth]{images/01_classification_vs_regression.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Classification vs Regression - Differences}
+\begin{columns}
+\begin{column}{0.48\textwidth}
+\textbf{Classification}
+\begin{itemize}
+    \item \textbf{Output:} Category (class)
+    \item \textbf{Type:} Discrete variable
+    \item \textbf{Examples:}
+    \begin{itemize}
+        \item Spam or Not spam
+        \item Cat, Dog, Bird
+        \item Sick or Healthy
+    \end{itemize}
+\end{itemize}
+\end{column}
+\begin{column}{0.48\textwidth}
+\textbf{Regression}
+\begin{itemize}
+    \item \textbf{Output:} Numeric value
+    \item \textbf{Type:} Continuous variable
+    \item \textbf{Examples:}
+    \begin{itemize}
+        \item House price
+        \item Temperature
+        \item Salary
+    \end{itemize}
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{1em}
+\begin{block}{Simple Rule}
+Predicting a number → Regression | Predicting a category → Classification
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Definition of Regression}
+\begin{block}{Definition}
+Regression is a supervised Machine Learning technique that predicts a continuous numeric value from input variables (features).
+\end{block}
+
+\vspace{1em}
+\textbf{Principle:}
+\begin{itemize}
+    \item Find the relationship between the features (X) and the target (Y)
+    \item Model this relationship mathematically
+    \item Use this model to make predictions
+\end{itemize}
+
+\vspace{1em}
+\textbf{Objective:}
+$$\text{Minimize the error between predictions and actual values}$$
+\end{frame}
+
+\begin{frame}
+\frametitle{Concrete Examples of Regression}
+\vspace{-0.2cm}
+\begin{center}
+\includegraphics[width= 0.8\textwidth]{images/02_exemples_regression.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Applications of Regression}
+\begin{table}
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+\textbf{Domain} & \textbf{Input (X)} & \textbf{Output (Y)} \\
+\midrule
+Real estate & Surface, location & Price \\
+Finance & Stock history & Future price \\
+Marketing & Advertising budget & Sales \\
+Weather & Historical data & Temperature \\
+Healthcare & Age, weight, blood pressure & Disease risk \\
+E-commerce & Season, promotions & Product demand \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{alertblock}{Important}
+Regression is everywhere in industry!
+\end{alertblock}
+\end{frame}
+
+% ==========================================
+% SECTION 2: SIMPLE LINEAR REGRESSION
+% ==========================================
+\section{Simple Linear Regression}
+
+\begin{frame}
+\frametitle{Principle of Linear Regression}
+\begin{center}
+\includegraphics[width=0.95\textwidth]{images/03_principe_regression_lineaire.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{What is Linear Regression?}
+\begin{block}{Definition}
+Linear regression models the relationship between an input variable X and an output variable Y using a straight line.
+\end{block}
+
+\vspace{0.5em}
+\textbf{Idea:}
+\begin{itemize}
+    \item Find THE best line that runs "through the middle" of the points
+    \item This line represents the general trend
+    \item We then use it to predict new values
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Why ``linear''?}
+\begin{itemize}
+    \item Because we're looking for a straight-line relationship
+    \item Simple, fast, interpretable
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Equation of a Line}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/04_equation_droite.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Mathematical Equation}
+\begin{block}{Equation of the line}
+$$y = ax + b$$
+\end{block}
+
+\vspace{1em}
+\begin{itemize}
+    \item \textbf{$y$}: Variable to predict (price, temperature, salary...)
+    \item \textbf{$x$}: Input variable (surface, experience, mileage...)
+    \item \textbf{$a$}: Slope (coefficient) - indicates the effect of X on Y
+    \item \textbf{$b$}: Intercept - value of Y when X=0
+\end{itemize}
+
+\vspace{1em}
+\begin{exampleblock}{Example: Real Estate Price}
+$$\text{Price} = 2000 \times \text{Surface} + 50000$$
+\begin{itemize}
+    \item $a = 2000$: each m² adds €2000
+    \item $b = 50000$: base price
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{Residuals and Errors}
+\begin{center}
+\includegraphics[width=\textwidth]{images/05_residus_mse.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{How Do We Measure Quality?}
+\begin{block}{Residual}
+Residual = Actual value - Predicted value
+$$e_i = y_i - \hat{y}_i$$
+\end{block}
+
+\vspace{0.5em}
+\textbf{Mean Squared Error (MSE):}
+$$\text{MSE} = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2$$
+
+\vspace{0.5em}
+\textbf{Goal of regression:}
+\begin{itemize}
+    \item Find the parameters $a$ and $b$ that minimize the MSE
+    \item The smaller the MSE, the better the model
+\end{itemize}
+
+\vspace{0.5em}
+\begin{alertblock}{Attention}
+MSE strongly penalizes large errors (because they're squared)!
+\end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Simple Linear Regression - Python Code}
+\begin{lstlisting}[language=Python]
+from sklearn.linear_model import LinearRegression
+import numpy as np
+
+# Data
+X = np.array([50, 60, 70, 80, 90, 100]).reshape(-1, 1)
+y = np.array([150, 180, 210, 240, 270, 300])  # Price (k$)
+
+# Create the model
+model = LinearRegression()
+# Train
+model.fit(X, y)
+# Coefficients
+print(f"Slope (a): {model.coef_[0]}")
+print(f"Intercept (b): {model.intercept_}")
+# Predict
+new_surface = np.array([[75]])
+predicted_price = model.predict(new_surface)
+print(f"Price for 75m2: {predicted_price[0]}k$")
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}
+\frametitle{Complete Example: Real Estate Price}
+\vspace{-0.2cm}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/06_exemple_complet_immobilier.png}
+\end{center}
+\end{frame}
+
+% ==========================================
+% SECTION 3: MULTIPLE LINEAR REGRESSION
+% ==========================================
+\section{Multiple Linear Regression}
+
+\begin{frame}
+\frametitle{Simple vs Multiple Regression}
+\begin{center}
+\includegraphics[width=\textwidth]{images/07_regression_multiple.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{What is Multiple Regression?}
+\begin{block}{Definition}
+Multiple linear regression uses several input variables to predict Y.
+\end{block}
+
+\vspace{0.5em}
+\textbf{Equation:}
+$$y = a_1 x_1 + a_2 x_2 + a_3 x_3 + ... + a_n x_n + b$$
+
+\vspace{0.5em}
+\begin{exampleblock}{Example: Real Estate Price}
+$$\text{Price} = 1500 \times \text{Surface} + 20000 \times \text{Bedrooms} - 500 \times \text{Age} + 50000$$
+\begin{itemize}
+    \item Several combined features
+    \item Each feature has its own coefficient
+    \item More accurate but more complex model
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{Advantages of Multiple Regression}
+\textbf{Why use several features?}
+
+\vspace{1em}
+\begin{itemize}
+    \item \textbf{More accurate:} Captures more information
+    \item \textbf{More realistic:} The real world is multidimensional
+    \item \textbf{Control of variables:} Isolates the effect of each feature
+\end{itemize}
+
+\vspace{1em}
+\begin{exampleblock}{Example}
+To predict a car's price:
+\begin{itemize}
+    \item Mileage
+    \item Year
+    \item Brand
+    \item Horsepower
+    \item Condition
+\end{itemize}
+→ More features = more accurate prediction
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Multiple Regression - Python Code}
+\begin{lstlisting}[language=Python]
+from sklearn.linear_model import LinearRegression
+import pandas as pd
+# Data with several features
+data = {
+    'Surface': [50, 60, 70, 80, 90, 100],
+    'Bedrooms': [1, 2, 2, 3, 3, 4],
+    'Age': [5, 10, 3, 15, 8, 2],
+    'Price': [150, 180, 220, 230, 280, 320]
+}
+df = pd.DataFrame(data)
+# Features and target
+X = df[['Surface', 'Bedrooms', 'Age']]
+y = df['Price']
+# Model
+model = LinearRegression()
+model.fit(X, y)
+# Coefficients
+for feature, coef in zip(X.columns, model.coef_):
+    print(f"{feature}: {coef:.2f}")
+print(f"Intercept: {model.intercept_:.2f}")
+\end{lstlisting}
+\end{frame}
+
+% ==========================================
+% SECTION 4: POLYNOMIAL REGRESSION
+% ==========================================
+\section{Polynomial Regression}
+
+\begin{frame}
+\frametitle{Beyond the Straight Line}
+\begin{block}{Question}
+What if the relationship between X and Y isn't linear?
+\end{block}
+
+\vspace{1em}
+\textbf{Polynomial Regression:}
+\begin{itemize}
+    \item Uses powers of X: $x$, $x^2$, $x^3$, etc.
+    \item Allows modeling curves
+    \item More flexible than simple linear regression
+\end{itemize}
+
+\vspace{1em}
+\textbf{General equation (degree 2):}
+$$y = a_2 x^2 + a_1 x + b$$
+
+\vspace{0.5em}
+\textbf{Example:}
+$$\text{Sales} = -2 \times \text{Temp}^2 + 80 \times \text{Temp} - 500$$
+\end{frame}
+
+\begin{frame}
+\frametitle{Different Polynomial Degrees}
+\vspace{-0.2cm}
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/08_regression_polynomiale_degres.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Choosing the Right Degree}
+\begin{table}
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{Degree} & \textbf{Shape} & \textbf{Use} \\
+\midrule
+1 & Straight line & Linear relationship \\
+2 & Parabola & Simple curve (U or ∩) \\
+3-5 & Complex curves & Non-linear relationships \\
+>10 & Very complex & Risk of overfitting! \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+\begin{alertblock}{Watch the Degree!}
+\begin{itemize}
+    \item Degree too small → Underfitting (too simple)
+    \item Degree too large → Overfitting (too complex)
+    \item Always test on held-out data!
+\end{itemize}
+\end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Polynomial Regression - Python Code}
+\begin{lstlisting}[language=Python]
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+import numpy as np
+# Data
+X = np.array([1, 2, 3, 4, 5]).reshape(-1, 1)
+y = np.array([2, 8, 18, 32, 50])  # y = 2*x^2
+# Create polynomial features (degree 2)
+poly = PolynomialFeatures(degree=2)
+X_poly = poly.fit_transform(X)
+# X_poly now contains: [1, x, x^2]
+# Regression
+model = LinearRegression()
+model.fit(X_poly, y)
+# Predict
+X_new = np.array([[6]])
+X_new_poly = poly.transform(X_new)
+y_pred = model.predict(X_new_poly)
+print(f"Prediction for x=6: {y_pred[0]}")
+\end{lstlisting}
+\end{frame}
+
+% ==========================================
+% SECTION 5: EVALUATION METRICS
+% ==========================================
+\section{Evaluation Metrics}
+
+\begin{frame}
+\frametitle{The 4 Main Metrics}
+\vspace{-0.2cm}
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/09_metriques_evaluation.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{MSE - Mean Squared Error}
+\begin{block}{Formula}
+$$\text{MSE} = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2$$
+\end{block}
+
+\textbf{Characteristics:}
+\begin{itemize}
+    \item Average of squared errors
+    \item Strongly penalizes large errors
+    \item Always positive
+    \item Unit = (unit of Y)²
+\end{itemize}
+
+\vspace{0.5em}
+\begin{exampleblock}{Example}
+If Y is in euros and MSE = 1,000,000, this means:
+\begin{itemize}
+    \item The squared errors average 1M€²
+    \item Hard to interpret → use RMSE instead
+\end{itemize}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{RMSE - Root Mean Squared Error}
+\begin{block}{Formula}
+$$\text{RMSE} = \sqrt{\text{MSE}} = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2}$$
+\end{block}
+
+\textbf{Characteristics:}
+\begin{itemize}
+    \item Square root of the MSE
+    \item \textbf{Same unit as Y!} (easy to interpret)
+    \item Represents the "typical" error
+\end{itemize}
+
+\vspace{0.5em}
+\begin{exampleblock}{Example}
+Real estate price: RMSE = €25,000
+\begin{itemize}
+    \item On average, predictions are off by ±€25k
+    \item Directly comparable to prices
+\end{itemize}
+\end{exampleblock}
+
+\textbf{When to use it?} When you want a metric in the unit of Y
+\end{frame}
+
+\begin{frame}
+\frametitle{MAE - Mean Absolute Error}
+\begin{block}{Formula}
+$$\text{MAE} = \frac{1}{n}\sum_{i=1}^{n}|y_i - \hat{y}_i|$$
+\end{block}
+
+\textbf{Characteristics:}
+\begin{itemize}
+    \item Average of absolute errors
+    \item Less sensitive to outliers than MSE/RMSE
+    \item Same unit as Y
+    \item More robust
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{MSE vs MAE:}
+\begin{itemize}
+    \item MSE/RMSE: strongly penalizes large errors
+    \item MAE: treats all errors equally
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{When to use it?} When you don't want to over-penalize outliers
+\end{frame}
+
+\begin{frame}
+\frametitle{R² - Coefficient of Determination}
+\begin{block}{Formula}
+$$R^2 = 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}$$
+\end{block}
+
+\textbf{Characteristics:}
+\begin{itemize}
+    \item Ranges between 0 and 1 (sometimes negative if very poor)
+    \item Measures the \% of variance explained
+    \item Unitless (easy to compare)
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Interpretation:}
+\begin{itemize}
+    \item $R^2 = 1.0$: Perfect prediction (100\%)
+    \item $R^2 = 0.8$: 80\% of variance explained
+    \item $R^2 = 0$: The model explains nothing
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{When to use it?} Standard metric for comparing models
+\end{frame}
+
+\begin{frame}
+\frametitle{Interpreting R²}
+\begin{center}
+\includegraphics[width=\textwidth]{images/10_interpretation_r2.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Metrics Summary Table}
+\begin{table}
+\centering
+\small
+\begin{tabular}{llll}
+\toprule
+\textbf{Metric} & \textbf{Unit} & \textbf{Best} & \textbf{Usage} \\
+\midrule
+MSE & Y² & 0 & Mathematics \\
+RMSE & Y & 0 & Interpretation \\
+MAE & Y & 0 & Robustness \\
+R² & None & 1 & Comparison \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+\textbf{Practical advice:}
+\begin{itemize}
+    \item Use \textbf{R²} for an overall view
+    \item Use \textbf{RMSE} for business interpretation
+    \item Use \textbf{MAE} if there are many outliers
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Computing the Metrics - Python Code}
+\begin{lstlisting}[language=Python]
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
+import numpy as np
+
+# Actual and predicted values
+y_true = np.array([100, 120, 90, 110, 95])
+y_pred = np.array([105, 115, 88, 112, 98])
+
+# Compute the metrics
+mse = mean_squared_error(y_true, y_pred)
+rmse = np.sqrt(mse)
+mae = mean_absolute_error(y_true, y_pred)
+r2 = r2_score(y_true, y_pred)
+
+# Display
+print(f"MSE  : {mse:.2f}")
+print(f"RMSE : {rmse:.2f}")
+print(f"MAE  : {mae:.2f}")
+print(f"R2   : {r2:.3f}")
+\end{lstlisting}
+\end{frame}
+
+% ==========================================
+% SECTION 6: TRAIN/TEST AND VALIDATION
+% ==========================================
+\section{Train/Test Split and Validation}
+
+\begin{frame}
+\frametitle{Train/Test Split}
+\begin{center}
+\includegraphics[width=\textwidth]{images/11_train_test_split.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Why Split the Data?}
+\begin{block}{Golden Rule}
+NEVER evaluate on the training data!
+\end{block}
+
+\vspace{1em}
+\textbf{Reason:}
+\begin{itemize}
+    \item The model "knows" the training data
+    \item It can memorize it (overfitting)
+    \item Training error doesn't reflect true performance
+\end{itemize}
+
+\vspace{1em}
+\textbf{Solution: Train/Test Split}
+\begin{itemize}
+    \item \textbf{Train Set (70-80\%)}: Train the model
+    \item \textbf{Test Set (20-30\%)}: Evaluate performance
+    \item The test set simulates "new data"
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Overfitting vs Underfitting}
+\begin{center}
+\includegraphics[width=\textwidth]{images/12_overfitting_underfitting.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Understanding Overfitting and Underfitting}
+\begin{columns}
+\begin{column}{0.48\textwidth}
+\textbf{Underfitting}
+\begin{itemize}
+    \item Model too simple
+    \item Doesn't capture the patterns
+    \item High bias
+    \item Poor on train AND test
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Solutions:}
+\begin{itemize}
+    \item More complex model
+    \item More features
+    \item Higher polynomial degree
+\end{itemize}
+\end{column}
+
+\begin{column}{0.48\textwidth}
+\textbf{Overfitting}
+\begin{itemize}
+    \item Model too complex
+    \item Memorizes the data
+    \item High variance
+    \item Good on train, poor on test
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Solutions:}
+\begin{itemize}
+    \item More data
+    \item Regularization
+    \item Simpler model
+\end{itemize}
+\end{column}
+\end{columns}
+
+\vspace{1em}
+\begin{alertblock}{Detection}
+Always compare Train vs Test performance!
+\end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Train/Test Split - Python Code}
+\begin{lstlisting}[language=Python]
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+# Data
+X = [[1], [2], [3], [4], [5], [6], [7], [8], [9], [10]]
+y = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+# 70/30 Split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+# Train
+model = LinearRegression()
+model.fit(X_train, y_train)
+# Evaluate
+y_pred_train = model.predict(X_train)
+y_pred_test = model.predict(X_test)
+
+print(f"R2 Train : {r2_score(y_train, y_pred_train):.3f}")
+print(f"R2 Test  : {r2_score(y_test, y_pred_test):.3f}")
+\end{lstlisting}
+\end{frame}
+
+% ==========================================
+% SECTION 7: REGULARIZATION
+% ==========================================
+\section{Regularization: Ridge and Lasso}
+
+\begin{frame}
+\frametitle{What is Regularization?}
+\begin{block}{Definition}
+Regularization penalizes coefficients that are too large in order to prevent overfitting.
+\end{block}
+
+\vspace{1em}
+\textbf{Problem:}
+\begin{itemize}
+    \item Complex models → very large coefficients
+    \item Large coefficients → overfitting
+\end{itemize}
+
+\vspace{1em}
+\textbf{Solution:}
+\begin{itemize}
+    \item Add a penalty to the cost function
+    \item Force the model to use smaller coefficients
+    \item Better generalization
+\end{itemize}
+
+\vspace{1em}
+\textbf{Two main types:}
+\begin{itemize}
+    \item \textbf{Ridge (L2)}: Penalizes the square of the coefficients
+    \item \textbf{Lasso (L1)}: Penalizes the absolute value
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Ridge vs Lasso}
+\vspace{-0.2cm}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/13_regularisation_ridge_lasso.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Ridge Regression (L2)}
+\begin{block}{Cost function}
+$$\text{Cost} = \text{MSE} + \alpha \sum_{i=1}^{n} a_i^2$$
+\end{block}
+
+\vspace{0.5em}
+\textbf{Characteristics:}
+\begin{itemize}
+    \item Penalizes the square of the coefficients
+    \item Shrinks coefficients but doesn't set them to zero
+    \item Keeps all features
+    \item Good when many features matter
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Parameter $\alpha$:}
+\begin{itemize}
+    \item $\alpha$ = 0: classic linear regression
+    \item $\alpha$ small: little regularization
+    \item $\alpha$ large: strong regularization
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Lasso Regression (L1)}
+\begin{block}{Cost function}
+$$\text{Cost} = \text{MSE} + \alpha \sum_{i=1}^{n} |a_i|$$
+\end{block}
+
+\vspace{0.5em}
+\textbf{Characteristics:}
+\begin{itemize}
+    \item Penalizes the absolute value of the coefficients
+    \item Can set some coefficients to exactly zero
+    \item Performs automatic feature selection
+    \item Good when many features are useless
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Main advantage:}
+\begin{itemize}
+    \item Simplifies the model by removing features
+    \item More interpretable
+    \item Identifies the important features
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Which to Use When?}
+\begin{table}
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{Situation} & \textbf{Regularization} & \textbf{Reason} \\
+\midrule
+Many features & Lasso & Auto selection \\
+Correlated features & Ridge & Keeps everything \\
+p > n (more features than data) & Lasso or Ridge & Avoids overfitting \\
+Interpretability & Lasso & Fewer features \\
+Max performance & Test both & Depends on data \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+\begin{block}{ElasticNet}
+Combines Ridge and Lasso: the best of both worlds!
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Ridge and Lasso - Python Code}
+\begin{lstlisting}[language=Python]
+from sklearn.linear_model import Ridge, Lasso
+from sklearn.preprocessing import PolynomialFeatures
+
+# Data
+X_train, y_train = ...  # your data
+
+# Polynomial features
+poly = PolynomialFeatures(degree=5)
+X_poly = poly.fit_transform(X_train)
+# Ridge
+ridge = Ridge(alpha=10)
+ridge.fit(X_poly, y_train)
+# Lasso
+lasso = Lasso(alpha=0.5)
+lasso.fit(X_poly, y_train)
+# Compare the coefficients
+print("Ridge coefs:", ridge.coef_)
+print("Lasso coefs:", lasso.coef_)
+# Lasso will have some coefficients = 0
+\end{lstlisting}
+\end{frame}
+
+% ==========================================
+% SECTION 8: COMPARISON AND CHOICE
+% ==========================================
+\section{Comparing the Models}
+
+\begin{frame}
+\frametitle{Comparing the Different Models}
+\vspace{-0.2cm}
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/14_comparaison_modeles.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Comparison Table}
+\begin{table}
+\centering
+\tiny
+\begin{tabular}{lllll}
+\toprule
+\textbf{Model} & \textbf{Complexity} & \textbf{Interpretability} & \textbf{Advantages} & \textbf{Disadvantages} \\
+\midrule
+Simple linear & Low & Excellent & Simple, fast & Linear only \\
+Multiple linear & Medium & Good & Several features & Linear \\
+Polynomial & High & Medium & Curves & Overfitting \\
+Ridge & Medium & Good & Anti-overfitting & Hyperparameter \\
+Lasso & Medium & Excellent & Feature selection & Hyperparameter \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+\textbf{How to choose?}
+\begin{enumerate}
+    \item Start with simple linear regression
+    \item Add features (multiple) if needed
+    \item Try polynomial if non-linear
+    \item Regularize (Ridge/Lasso) if overfitting
+    \item Compare R² on the test set
+\end{enumerate}
+\end{frame}
+
+
+% SECTION 9: COMPLETE WORKFLOW
+% ==========================================
+\section{Complete Workflow}
+
+\begin{frame}
+\frametitle{Complete Regression Pipeline}
+\vspace{-0.2cm}
+
+\begin{center}
+\includegraphics[width=0.8\textwidth]{images/15_workflow_complet.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{The 9 Steps of the Workflow}
+\begin{enumerate}
+    \item \textbf{Raw data}: Collection and loading
+    \item \textbf{Exploration}: Visualization, statistics
+    \item \textbf{Correlations}: Identify relationships
+    \item \textbf{Train/Test Split}: 70/30 or 80/20 split
+    \item \textbf{Training}: Fit the model
+    \item \textbf{Predictions}: Predict on the test set
+    \item \textbf{Evaluation}: Compute metrics (R², RMSE...)
+    \item \textbf{Residual analysis}: Check for patterns
+    \item \textbf{Deployment}: Use in production
+\end{enumerate}
+
+\vspace{0.5em}
+\begin{alertblock}{Important}
+This is an iterative process! We often go back to earlier steps.
+\end{alertblock}
+\end{frame}
+
+
+
+% ==========================================
+% SECTION 10: BEST PRACTICES
+% ==========================================
+
+
+
+\begin{frame}
+\frametitle{When to Use Which Model?}
+\begin{table}
+\centering
+\small
+\begin{tabular}{ll}
+\toprule
+\textbf{Situation} & \textbf{Recommended model} \\
+\midrule
+Simple linear relationship & Simple linear regression \\
+Several features & Multiple regression \\
+Curved relationship & Polynomial regression \\
+Many features & Lasso (selection) \\
+Correlated features & Ridge \\
+Overfitting & Ridge or Lasso \\
+Need for interpretability & Linear or Lasso \\
+Max performance & Test several! \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\vspace{1em}
+\begin{block}{Advice}
+In practice, always test several models and compare their performance!
+\end{block}
+\end{frame}
+
+% ==========================================
+% SECTION 11: PRACTICE EXERCISES
+% ==========================================
+\section{Practice Exercises}
+
+\begin{frame}
+\frametitle{Exercise 1: Car Prices}
+\textbf{Dataset:} Used cars
+
+\vspace{0.5em}
+\textbf{Features:}
+\begin{itemize}
+    \item Mileage
+    \item Year
+    \item Horsepower (HP)
+    \item Number of doors
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Target:} Price (in €)
+
+\vspace{1em}
+\textbf{To do:}
+\begin{enumerate}
+    \item Load and explore the data
+    \item Visualize the correlations
+    \item Build a multiple regression model
+    \item Evaluate with R² and RMSE
+    \item Predict the price of a car: 50000km, 2018, 120HP, 5 doors
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exercise 2: Sales Forecasting}
+\textbf{Dataset:} Monthly sales for a store
+
+\vspace{0.5em}
+\textbf{Features:}
+\begin{itemize}
+    \item Advertising budget (€)
+    \item Number of promotions
+    \item Average temperature
+    \item Public holiday (yes/no)
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Target:} Number of sales
+
+\vspace{1em}
+\textbf{To do:}
+\begin{enumerate}
+    \item Train/Test split (80/20)
+    \item Test linear and polynomial regression (degree 2)
+    \item Compare the R² scores
+    \item Identify the 2 most important features
+    \item Predict sales with: €5000 ad spend, 3 promos, 25°C, not a holiday
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Exercise 3: Regularization}
+\textbf{Dataset:} Real estate prices with 20 features
+
+\vspace{1em}
+\textbf{Problem:} Many features, risk of overfitting
+
+\vspace{1em}
+\textbf{To do:}
+\begin{enumerate}
+    \item Build a linear model without regularization
+    \item Note R² on train and test
+    \item Build a Ridge model ($\alpha= 10)
+    \item Build a Lasso model ($\alpha= 0.5)
+    \item Compare the 3 models
+    \item Identify the features selected by Lasso
+    \item Which one generalizes best?
+\end{enumerate}
+\end{frame}
+
+
+
+% ==========================================
+% SECTION 12: CONCLUSION
+% ==========================================
+\section{Conclusion}
+
+\begin{frame}
+\frametitle{What You Have Learned}
+\textbf{Fundamental concepts:}
+\begin{itemize}
+    \item Difference between classification/regression
+    \item Simple and multiple linear regression
+    \item Polynomial regression
+    \item Regularization (Ridge, Lasso)
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Metrics:}
+\begin{itemize}
+    \item MSE, RMSE, MAE, R²
+    \item Interpretation and use
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Validation:}
+\begin{itemize}
+    \item Train/Test split
+    \item Overfitting vs Underfitting
+    \item Residual analysis
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Practice:}
+\begin{itemize}
+    \item Complete workflow with Scikit-learn
+    \item Model comparison
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}
+\frametitle{Recommended Resources}
+
+
+\textbf{Datasets to practice:}
+\begin{itemize}
+    \item Kaggle: \texttt{kaggle.com/datasets}
+    \item UCI ML Repository
+    \item Scikit-learn: built-in datasets
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Key Points to Remember}
+\begin{block}{Regression = Predicting numbers}
+Classification → categories | Regression → continuous values
+\end{block}
+
+
+\begin{block}{Always Train/Test Split}
+Never evaluate on the training data!
+\end{block}
+
+
+\begin{block}{R² is your friend}
+The main metric for comparing models
+\end{block}
+
+\begin{block}{Start simple}
+Linear → Multiple → Polynomial → Regularized
+\end{block}
+
+\begin{block}{Overfitting = the enemy}
+Watch train vs test, regularize if needed
+\end{block}
+\end{frame}
+
+
+
+\end{document}
