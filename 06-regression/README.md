@@ -1,6 +1,5 @@
 # 06 — Regression
 
-**Slides:** `regression.tex` — add your PDF here, e.g. `regression.pdf`
 
 ## What this chapter covers
 
