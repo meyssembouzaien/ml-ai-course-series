@@ -1,4 +1,4 @@
-# Machine Learning & AI Course Series
+# Machine Learning and AI Course Series
 
 English translations of a full introductory Machine Learning / AI course series,
 originally written and taught in French by **Meyssem Bouzaien** (M2 IoT and
