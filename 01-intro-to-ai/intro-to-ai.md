@@ -328,7 +328,7 @@ discover hidden structures.
 6. Technical and ethical challenges
 7. The future of AI
 
-> **Key point:** AI isn't magic — it's mathematics + data + computation!
+> **Key point:** AI isn't magic — it's mathematics + data + computation
 
 ---
 
