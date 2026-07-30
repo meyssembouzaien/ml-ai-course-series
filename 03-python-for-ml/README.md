@@ -1,6 +1,5 @@
 # 03 — Python for Machine Learning
 
-**Slides:** `python-for-ml.tex` — add your PDF here, e.g. `python-for-ml.pdf`
 
 ## What this chapter covers
 
