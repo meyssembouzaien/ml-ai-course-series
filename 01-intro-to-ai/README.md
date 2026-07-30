@@ -1,6 +1,5 @@
 # 01 — Introduction to Artificial Intelligence
 
-**Slides:** `intro-to-ai.md` (English) — add your PDF here, e.g. `intro-to-ai.pdf`
 
 ## What this chapter covers
 
