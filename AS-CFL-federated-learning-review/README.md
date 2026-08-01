@@ -1,4 +1,4 @@
-# AS-CFL — Article Review (Data Mining & Machine Learning)
+# AS-CFL — Article Review (Data Mining and Machine Learning)
 
 Review and critical analysis of:
 
