@@ -15,7 +15,6 @@ Prepared by **Meyssem Bouzaien** — Data Mining & Machine Learning course, supe
 | `en/report_AS-CFL_en.pdf` | English translation of the report |
 | `en/presentation_AS-CFL_en.pdf` | English translation of the slide deck (25 slides) |
 
-> Drop your existing French PDFs into an `fr/` folder next to `en/` (same filenames referenced above) to complete the project structure — only the English versions were generated in this pass.
 
 ## Summary
 
